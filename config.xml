@@ -75,9 +75,18 @@
         <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640" />
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
-        <config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
-            <string>You can take photos</string>
-        </config-file>
+        <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
+            <string>Need camera access to take pictures</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
+            <string>Need photo library access to get pictures from there</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+            <string>Need location access to find things nearby</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryAddUsageDescription">
+            <string>Need photo library access to save pictures there</string>
+        </edit-config>
     </platform>
     <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
@@ -85,6 +94,9 @@
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^3.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
-    <plugin name="cordova-plugin-camera" spec="4.0.3" />
+    <plugin name="cordova-plugin-camera" spec="4.0.3">
+        <variable name="CAMERA_USAGE_DESCRIPTION" value="Taking pictures at the scene of the crash" />
+        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Uploading pictures from the scene of the crash" />
+    </plugin>
     <engine name="ios" spec="4.5.5" />
 </widget>
