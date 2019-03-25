@@ -18,11 +18,19 @@
     </button>
     <ng-container *ngIf="photo">
         <!-- <img [src]="sanitiser.bypassSecurityTrustUrl(photo.originalFilePath)"> -->
-        <img [src]="photo.originalFilePath" (click)="openFullscreen(photo)">
-        <!-- <img [src]="photo.copyNative" (click)="openFullscreen(photo)"> -->
-        <!-- <img [src]="photo.copyNativeSplit" (click)="openFullscreen(photo)"> -->
-        <!-- <img [src]="photo.ionicNativeCopy" (click)="openFullscreen(photo)"> -->
+        <p>{{ photo.originalFilePath }}</p>
+        <img [src]="photo.originalFilePath" >
+        <p>{{ photo.ionicNativeOriginal }}</p>
+        <img [src]="photo.ionicNativeOriginal" >
+        <p>{{ photo.copyNative }}</p>
+        <img [src]="photo.copyNative" >
+        <p>{{ photo.copyNativeSplit }}</p>
+        <img [src]="photo.copyNativeSplit" >
+        <p>{{ photo.ionicNativeCopy }}</p>
+        <img [src]="photo.ionicNativeCopy" >
     </ng-container>
-    <h1>Image data</h1>
-    <p>{{ imageData }}</p>
+        <h1>Image data</h1>
+        <pre><code>{{ imageData }}</code></pre>
+        <h1>Photo</h1>
+        <pre><code>{{ photo }}</code></pre>
 </ion-content>
