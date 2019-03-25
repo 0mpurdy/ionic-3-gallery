@@ -16,21 +16,16 @@
         (click)="addPhoto()">
         Add photo
     </button>
-    <ng-container *ngIf="photo">
-        <!-- <img [src]="sanitiser.bypassSecurityTrustUrl(photo.originalFilePath)"> -->
-        <p>{{ photo.originalFilePath }}</p>
-        <img [src]="photo.originalFilePath" >
-        <p>{{ photo.ionicNativeOriginal }}</p>
-        <img [src]="photo.ionicNativeOriginal" >
-        <p>{{ photo.copyNative }}</p>
-        <img [src]="photo.copyNative" >
-        <p>{{ photo.copyNativeSplit }}</p>
-        <img [src]="photo.copyNativeSplit" >
-        <p>{{ photo.ionicNativeCopy }}</p>
-        <img [src]="photo.ionicNativeCopy" >
+    <ng-container *ngFor="let source of photoUrls">
+        <p><strong>{{source.name}} : </strong>{{ source.url }}</p>
+        <img [src]="source.url" >
     </ng-container>
-        <h1>Image data</h1>
-        <pre><code>{{ imageData }}</code></pre>
-        <h1>Photo</h1>
-        <pre><code>{{ photo }}</code></pre>
+    <ng-container *ngFor="let source of photoUrls">
+        <p><strong>Sanitised {{source.name}} : </strong>{{ source.url }}</p>
+        <img [src]="sanitiser.bypassSecurityTrustUrl(source.url)" >
+    </ng-container>
+    <h1>Image data</h1>
+    <pre><code>{{ imageData }}</code></pre>
+    <h1>Photo</h1>
+    <pre><code>{{ JSON.stringify(photo, null, 2) }}</code></pre>
 </ion-content>
