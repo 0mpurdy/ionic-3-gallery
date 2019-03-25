@@ -98,5 +98,6 @@
         <variable name="CAMERA_USAGE_DESCRIPTION" value="Taking pictures at the scene of the crash" />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Uploading pictures from the scene of the crash" />
     </plugin>
+    <plugin name="cordova-plugin-file" spec="6.0.1" />
     <engine name="ios" spec="4.5.5" />
 </widget>

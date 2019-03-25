@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
 
 @Component({
   selector: 'page-home',
@@ -15,11 +16,12 @@ export class HomePage {
   constructor(
     public navCtrl: NavController,
     public camera: Camera,
+    public file: File,
   ) {
 
   }
 
-  public addPhoto() {
+  public async addPhoto() {
     const options: CameraOptions = {
       quality: 100,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
