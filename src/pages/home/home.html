@@ -18,4 +18,6 @@
   </button>
   <img *ngIf="photo"
     [src]="sanitiser.bypassSecurityTrustUrl(photo)">
+  <h1>Image data</h1>
+  <p>{{ imageData }}</p>
 </ion-content>
