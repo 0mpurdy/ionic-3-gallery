@@ -1,23 +1,28 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title>
+            Ionic Blank
+        </ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
+    The world is your oyster.
+    <p>
     If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
-  <button ion-button
-    block
-    (click)="addPhoto()">
-    Add photo
-  </button>
-  <img *ngIf="photo"
-    [src]="sanitiser.bypassSecurityTrustUrl(photo)">
-  <h1>Image data</h1>
-  <p>{{ imageData }}</p>
+    </p>
+    <button ion-button
+        block
+        (click)="addPhoto()">
+        Add photo
+    </button>
+    <ng-container *ngIf="photo">
+        <!-- <img [src]="sanitiser.bypassSecurityTrustUrl(photo.originalFilePath)"> -->
+        <img [src]="photo.originalFilePath" (click)="openFullscreen(photo)">
+        <!-- <img [src]="photo.copyNative" (click)="openFullscreen(photo)"> -->
+        <!-- <img [src]="photo.copyNativeSplit" (click)="openFullscreen(photo)"> -->
+        <!-- <img [src]="photo.ionicNativeCopy" (click)="openFullscreen(photo)"> -->
+    </ng-container>
+    <h1>Image data</h1>
+    <p>{{ imageData }}</p>
 </ion-content>

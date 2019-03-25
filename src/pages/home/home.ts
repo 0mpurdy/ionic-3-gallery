@@ -33,8 +33,11 @@ export class HomePage {
       // imageData is either a base64 encoded string or a file URI
       // If it's base64 (DATA_URL):
       // this.photo = 'data:image/jpeg;base64,' + imageData;
-      this.photo = imageData;
-      console.log(imageData);
+      this.photo = {
+        originalFilePath: imageData,
+      };
+      console.log('Image data', imageData);
+      console.log('Photo', this.photo);
     }, (err) => {
       // Handle error
     });
