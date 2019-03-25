@@ -16,13 +16,9 @@
         (click)="addPhoto()">
         Add photo
     </button>
-    <ng-container *ngFor="let source of photoUrls">
-        <p><strong>{{source.name}} : </strong>{{ source.url }}</p>
-        <img [src]="source.url" >
-    </ng-container>
-    <ng-container *ngFor="let source of photoUrls">
-        <p><strong>Sanitised {{source.name}} : </strong>{{ source.url }}</p>
-        <img [src]="sanitiser.bypassSecurityTrustUrl(source.url)" >
+    <ng-container *ngIf="photo">
+        <p><strong>Base64</strong></p>
+        <img [src]="photo" >
     </ng-container>
     <h1>Image data</h1>
     <pre><code>{{ imageData }}</code></pre>
