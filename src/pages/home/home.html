@@ -9,17 +9,46 @@
 <ion-content padding>
     The world is your oyster.
     <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
+        If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
     </p>
+
     <button ion-button
         block
-        (click)="addPhoto()">
-        Add photo
+        (click)="clear()">
+        Clear
     </button>
-    <ng-container *ngIf="photo">
-        <p><strong>Base64</strong></p>
-        <img [src]="photo" >
-    </ng-container>
+
+    <button ion-button
+        block
+        (click)="getBase64FromCamera()">
+        Add base64 photo
+    </button>
+
+    <button ion-button
+        block
+        (click)="getFileUrlOptions()">
+        Add photo urls
+    </button>
+
+    <ion-card *ngIf="base64Photo">
+      <img [src]="base64Photo" >
+      <ion-card-content>
+        <ion-card-title>
+          Base64
+        </ion-card-title>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngFor="let source of photoUrls">
+      <img [src]="source.url">
+      <ion-card-content>
+        <ion-card-title>
+          {{source.name}}
+        </ion-card-title>
+        {{source.url}}
+      </ion-card-content>
+    </ion-card>
+
     <h1>Image data</h1>
     <pre><code>{{ imageData }}</code></pre>
     <h1>Photo</h1>
