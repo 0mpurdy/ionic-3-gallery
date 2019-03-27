@@ -36,6 +36,11 @@
         Add photo urls
     </button>
 
+    <h1>Image data</h1>
+    <pre><code>{{ imageData }}</code></pre>
+    <h1>Photo</h1>
+    <pre><code>{{ JSON.stringify(photo, null, 2) }}</code></pre>
+
     <ion-card *ngIf="base64Photo">
         <img [src]="base64Photo" >
         <ion-card-content>
@@ -77,8 +82,4 @@
         </ion-row>
     </ion-grid>
 
-    <h1>Image data</h1>
-    <pre><code>{{ imageData }}</code></pre>
-    <h1>Photo</h1>
-    <pre><code>{{ JSON.stringify(photo, null, 2) }}</code></pre>
 </ion-content>
