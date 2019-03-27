@@ -34,6 +34,20 @@ export class HomePage {
     this.imageData = undefined;
   }
 
+  public async getNativeFileUrlOptions() {
+    const options: CameraOptions = {
+      quality: 100,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      destinationType: this.camera.DestinationType.NATIVE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+
+    this.camera.getPicture(options).then(this.handleCameraResponse() , (err) => {
+      console.log('Camera error: ', err);
+    });
+  }
+
   public async getFileUrlOptions() {
     const options: CameraOptions = {
       quality: 100,
@@ -43,7 +57,13 @@ export class HomePage {
       mediaType: this.camera.MediaType.PICTURE
     }
 
-    this.camera.getPicture(options).then(async (imageData) => {
+    this.camera.getPicture(options).then(this.handleCameraResponse() , (err) => {
+      console.log('Camera error: ', err);
+    });
+  }
+
+  public handleCameraResponse() {
+    return async (imageData) => {
       this.imageData = imageData;
 
       let photo = {} as any;
@@ -67,11 +87,13 @@ export class HomePage {
         console.log('Got temp directory', tempDirectory);
 
         const newName = (new Date()).toISOString() + entry.name;
+        console.log('New name', newName);
 
         const copyFileResult = await new Promise<Entry>((resolve, reject) => {
-          return entry.copyTo(tempDirectory, newName, resolve, reject);
+          entry.copyTo(tempDirectory, newName, resolve, reject);
         });
         console.log('Copied file', copyFileResult);
+
         photo.copy = copyFileResult;
         this.photoUrls.push({ name: 'copyNative', url: copyFileResult.nativeURL });
         this.photoUrls.push({ name: 'copyNativeSplit', url: copyFileResult.nativeURL.split('//')[1] });
@@ -84,9 +106,7 @@ export class HomePage {
 
       console.log('Image data', imageData);
       console.log('Photo', this.photo);
-    }, (err) => {
-      console.log('Camera error: ', err);
-    });
+    };
   }
 
   public pushAllUrls(name: string, url: string) {
