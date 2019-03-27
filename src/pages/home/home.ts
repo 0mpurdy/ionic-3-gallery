@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { NavController } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File, FileEntry, DirectoryEntry, Entry } from '@ionic-native/file';
+
+interface StoredPhoto {
+  source: string;
+}
 
 @Component({
   selector: 'page-home',
@@ -19,11 +23,28 @@ export class HomePage {
   public showPhotos = true;
 
   constructor(
-    public navCtrl: NavController,
     public camera: Camera,
     public file: File,
+    public navCtrl: NavController,
+    public platform: Platform,
     public sanitizer: DomSanitizer,
   ) {
+
+  }
+
+  ngOnInit() {
+
+    this.platform.ready().then(() => {
+      const storedPhotosString = localStorage.getItem('photos') as any;
+      let storedPhotos: StoredPhoto[] = [];
+      if (storedPhotosString) {
+        storedPhotos = JSON.parse(storedPhotosString) as StoredPhoto[];
+        if (storedPhotos.length > 0) {
+          this.photo = storedPhotos[0];
+          this.resolveLink(storedPhotos[0].source);
+        }
+      }
+    });
 
   }
 
@@ -65,48 +86,54 @@ export class HomePage {
   public handleCameraResponse() {
     return async (imageData) => {
       this.imageData = imageData;
-
-      let photo = {} as any;
+      let photo = {};
       this.photoUrls = [];
-
       try {
-        const win = window as any;
-
-        const entry = await this.file.resolveLocalFilesystemUrl(imageData) as FileEntry;
-        console.log('Got entry', entry);
-        photo.original = entry;
-        this.pushAllUrls('Original', entry.toURL());
-        this.pushAllUrls('Original Split', entry.toURL().split('//')[1]);
-
-        const photoFile = await new Promise((resolve, reject) => {
-          entry.file(resolve, reject);
-        });
-        console.log('Got photo file', photoFile);
-
-        const tempDirectory = await this.file.resolveLocalFilesystemUrl(this.file.tempDirectory) as DirectoryEntry;
-        console.log('Got temp directory', tempDirectory);
-
-        const newName = (new Date()).toISOString() + entry.name;
-        console.log('New name', newName);
-
-        const copyFileResult = await new Promise<Entry>((resolve, reject) => {
-          entry.copyTo(tempDirectory, newName, resolve, reject);
-        });
-        console.log('Copied file', copyFileResult);
-
-        photo.copy = copyFileResult;
-        this.photoUrls.push({ name: 'copyNative', url: copyFileResult.nativeURL });
-        this.photoUrls.push({ name: 'copyNativeSplit', url: copyFileResult.nativeURL.split('//')[1] });
-        this.photoUrls.push({ name: 'ionicNativeCopy', url: win.Ionic.WebView.convertFileSrc(copyFileResult.nativeURL) });
-
+        photo = this.resolveLink(imageData);
       } catch (err) {
         console.log('Camera error inside promise: ', err);
       } 
       this.photo = photo;
+      localStorage.setItem('photos', JSON.stringify([{ source: imageData }]));
 
       console.log('Image data', imageData);
       console.log('Photo', this.photo);
     };
+  }
+
+  public async resolveLink(link: string) {
+    let photo = {} as any;
+
+    console.log('Attempting to resolve: ', link);
+    const entry = await this.file.resolveLocalFilesystemUrl(link) as FileEntry;
+    console.log('Got entry', entry);
+    photo.original = entry;
+    this.pushAllUrls('Original', entry.toURL());
+    this.pushAllUrls('Original Split', entry.toURL().split('//')[1]);
+
+    const photoFile = await new Promise((resolve, reject) => {
+      entry.file(resolve, reject);
+    });
+    console.log('Got photo file', photoFile);
+
+    const tempDirectory = await this.file.resolveLocalFilesystemUrl(this.file.tempDirectory) as DirectoryEntry;
+    console.log('Got temp directory', tempDirectory);
+
+    let newName = (new Date()).toISOString();
+    newName = newName.replace(/[:\.]/g, '');
+    newName = newName + '.jpg';
+    console.log('New name', newName);
+
+    const copyFileResult = await new Promise<Entry>((resolve, reject) => {
+      entry.copyTo(tempDirectory, newName, resolve, reject);
+    });
+    console.log('Copied file', copyFileResult);
+
+    photo.copy = copyFileResult;
+    this.pushAllUrls('Copy native', copyFileResult.nativeURL);
+    this.pushAllUrls('Copy native split', copyFileResult.nativeURL.split('//')[1]);
+
+    return photo;
   }
 
   public pushAllUrls(name: string, url: string) {
