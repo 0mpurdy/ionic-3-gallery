@@ -9,7 +9,7 @@
 <ion-content padding>
     The world is your oyster.
     <p>
-        If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
+    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
     </p>
 
     <button ion-button
@@ -31,23 +31,45 @@
     </button>
 
     <ion-card *ngIf="base64Photo">
-      <img [src]="base64Photo" >
-      <ion-card-content>
-        <ion-card-title>
-          Base64
-        </ion-card-title>
-      </ion-card-content>
+        <img [src]="base64Photo" >
+        <ion-card-content>
+            <ion-card-title>
+                Base64
+            </ion-card-title>
+        </ion-card-content>
     </ion-card>
 
-    <ion-card *ngFor="let source of photoUrls">
-      <img [src]="source.url">
-      <ion-card-content>
-        <ion-card-title>
-          {{source.name}}
-        </ion-card-title>
-        {{source.url}}
-      </ion-card-content>
-    </ion-card>
+    <button *ngIf="!showPhotos"
+        ion-button
+        block
+        (click)="showPhotos = true">
+        Show Photos
+    </button>
+
+    <button *ngIf="showPhotos"
+        ion-button
+        block
+        (click)="showPhotos = false">
+        Hide Photos
+    </button>
+
+    <ion-grid *ngIf="showPhotos">
+        <ion-row>
+            
+            <ion-col col-4 *ngFor="let source of photoUrls">
+                <ion-card>
+                    <img [src]="source.url">
+                    <ion-card-content>
+                        <ion-card-title>
+                            {{source.name}}
+                        </ion-card-title>
+                        {{source.url}}
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+
+        </ion-row>
+    </ion-grid>
 
     <h1>Image data</h1>
     <pre><code>{{ imageData }}</code></pre>

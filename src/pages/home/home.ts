@@ -16,6 +16,7 @@ export class HomePage {
   public photo;
   public photoUrls = [];
   public imageData;
+  public showPhotos = true;
 
   constructor(
     public navCtrl: NavController,
@@ -54,12 +55,32 @@ export class HomePage {
         const entry = await this.file.resolveLocalFilesystemUrl(imageData) as FileEntry;
         console.log('Got entry', entry);
         photo.original = entry;
-        this.photoUrls.push({ name: 'originalPath', url: entry.toURL() });
-        this.photoUrls.push({ name: 'sanitized originalPath', url: this.sanitizer.bypassSecurityTrustResourceUrl(entry.toURL()) });
-        this.photoUrls.push({ name: 'originalSplit', url: entry.toURL().split('//')[1] });
-        this.photoUrls.push({ name: 'sanitized originalSplit', url: this.sanitizer.bypassSecurityTrustResourceUrl(entry.toURL().split('//')[1]) });
-        this.photoUrls.push({ name: 'ionicNativeOriginal ', url: win.Ionic.WebView.convertFileSrc(entry.toURL()) });
-        this.photoUrls.push({ name: 'sanitized ionicNativeOriginal', url: this.sanitizer.bypassSecurityTrustResourceUrl(win.Ionic.WebView.convertFileSrc(entry.toURL())) });
+        this.photoUrls.push({
+          name: 'originalPath',
+          url: entry.toURL()
+        });
+        this.photoUrls.push({
+          name: 'sanitized originalPath',
+          url: this.sanitizer.bypassSecurityTrustResourceUrl(entry.toURL())
+        });
+        this.photoUrls.push({
+          name: 'originalSplit',
+          url: entry.toURL().split('//')[1]
+        });
+        this.photoUrls.push({
+          name: 'sanitized originalSplit',
+          url: this.sanitizer.bypassSecurityTrustResourceUrl(entry.toURL().split('//')[1])
+        });
+        this.photoUrls.push({
+          name: 'ionicNativeOriginal ',
+          url: win.Ionic.WebView.convertFileSrc(entry.toURL())
+        });
+        this.photoUrls.push({
+          name: 'sanitized ionicNativeOriginal',
+          url: this.sanitizer.bypassSecurityTrustResourceUrl(
+            win.Ionic.WebView.convertFileSrc(entry.toURL())
+          )
+        });
 
         const photoFile = await new Promise((resolve, reject) => {
           entry.file(resolve, reject);
@@ -69,8 +90,10 @@ export class HomePage {
         const tempDirectory = await this.file.resolveLocalFilesystemUrl(this.file.tempDirectory) as DirectoryEntry;
         console.log('Got temp directory', tempDirectory);
 
+        const newName = (new Date()).toISOString() + entry.name;
+
         const copyFileResult = await new Promise<Entry>((resolve, reject) => {
-          return entry.copyTo(tempDirectory, entry.name, resolve, reject);
+          return entry.copyTo(tempDirectory, newName, resolve, reject);
         });
         console.log('Copied file', copyFileResult);
         photo.copy = copyFileResult;
