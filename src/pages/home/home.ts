@@ -55,32 +55,8 @@ export class HomePage {
         const entry = await this.file.resolveLocalFilesystemUrl(imageData) as FileEntry;
         console.log('Got entry', entry);
         photo.original = entry;
-        this.photoUrls.push({
-          name: 'originalPath',
-          url: entry.toURL()
-        });
-        this.photoUrls.push({
-          name: 'sanitized originalPath',
-          url: this.sanitizer.bypassSecurityTrustResourceUrl(entry.toURL())
-        });
-        this.photoUrls.push({
-          name: 'originalSplit',
-          url: entry.toURL().split('//')[1]
-        });
-        this.photoUrls.push({
-          name: 'sanitized originalSplit',
-          url: this.sanitizer.bypassSecurityTrustResourceUrl(entry.toURL().split('//')[1])
-        });
-        this.photoUrls.push({
-          name: 'ionicNativeOriginal ',
-          url: win.Ionic.WebView.convertFileSrc(entry.toURL())
-        });
-        this.photoUrls.push({
-          name: 'sanitized ionicNativeOriginal',
-          url: this.sanitizer.bypassSecurityTrustResourceUrl(
-            win.Ionic.WebView.convertFileSrc(entry.toURL())
-          )
-        });
+        this.pushAllUrls('Original', entry.toURL());
+        this.pushAllUrls('Original Split', entry.toURL().split('//')[1]);
 
         const photoFile = await new Promise((resolve, reject) => {
           entry.file(resolve, reject);
@@ -110,6 +86,34 @@ export class HomePage {
       console.log('Photo', this.photo);
     }, (err) => {
       console.log('Camera error: ', err);
+    });
+  }
+
+  public pushAllUrls(name: string, url: string) {
+    this.photoUrls.push({
+      name,
+      url,
+    });
+    this.pushSanitisedUrls(name, url);
+
+    const win = window as any;
+    const ionicUrlName = 'Ionic format ' + name;
+    const ionicUrl = win.Ionic.WebView.convertFileSrc(url);
+    this.photoUrls.push({
+      name: ionicUrlName,
+      url: ionicUrl,
+    });
+    this.pushSanitisedUrls(ionicUrlName, ionicUrl);
+  }
+
+  public pushSanitisedUrls(name: string, url: string) {
+    this.photoUrls.push({
+      name: 'Sanitised resource ' + name,
+      url: this.sanitizer.bypassSecurityTrustResourceUrl(url),
+    });
+    this.photoUrls.push({
+      name: 'Sanitised url ' + name,
+      url: this.sanitizer.bypassSecurityTrustUrl(url),
     });
   }
 
