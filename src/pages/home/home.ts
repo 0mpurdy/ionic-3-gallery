@@ -55,6 +55,26 @@ export class HomePage {
     this.imageData = undefined;
   }
 
+  public async takePhoto(native: boolean) {
+    const options: CameraOptions = {
+      quality: 75,
+      sourceType: this.camera.PictureSourceType.CAMERA,
+      destinationType: native ? this.camera.DestinationType.NATIVE_URI : this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      saveToPhotoAlbum: true,
+    };
+
+    console.log('Taking photo');
+    try {
+      const imageData = await this.camera.getPicture(options);
+      console.log('Image data', imageData);
+      this.handleCameraResponse()(imageData);
+    } catch (error) {
+      console.log('Photo taking error', error);
+    }
+  }
+
   public async getNativeFileUrlOptions() {
     const options: CameraOptions = {
       quality: 100,

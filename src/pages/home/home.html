@@ -36,6 +36,18 @@
         Add photo urls
     </button>
 
+    <button ion-button
+        block
+        (click)="takePhoto(false)">
+        Take FILE_URI photo
+    </button>
+    
+    <button ion-button
+        block
+        (click)="takePhoto(true)">
+        Take NATIVE_URI photo
+    </button>
+
     <h1>Image data</h1>
     <pre><code>{{ imageData }}</code></pre>
     <h1>Photo</h1>
