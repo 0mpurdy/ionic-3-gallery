@@ -28,7 +28,7 @@
     <preference name="UseScheme" value="true" />
     <allow-navigation href="http://localhost:11450/*" />
     <preference name="windows-target-version" value="10.0" />
-    <!-- <preference name="CameraUsesGeolocation" value="true" /> -->
+    <preference name="CameraUsesGeolocation" value="true" />
     <preference name="loadUrlTimeoutValue" value="700000" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <platform name="android">
